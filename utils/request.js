@@ -1,4 +1,4 @@
-const { API_BASE_URL } = require('../config/api')
+const { API_BASE_URL, REQUEST_RETRY_COUNT, REQUEST_TIMEOUT_MS } = require('../config/api')
 
 function getToken() {
   return wx.getStorageSync('token') || ''
@@ -58,7 +58,13 @@ function errorFromResponse(response) {
   })
 }
 
-function request(options) {
+function shouldRetry(error) {
+  if (!error) return false
+  if (!error.statusCode) return true
+  return error.statusCode >= 500
+}
+
+function requestOnce(options) {
   const token = getToken()
   const header = Object.assign(
     {
@@ -76,7 +82,7 @@ function request(options) {
       url: `${API_BASE_URL}${options.url}`,
       method: options.method || 'GET',
       data: options.data || {},
-      timeout: options.timeout || 12000,
+      timeout: options.timeout || REQUEST_TIMEOUT_MS,
       header,
       success(response) {
         if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -96,6 +102,32 @@ function request(options) {
       },
     })
   })
+}
+
+async function request(options) {
+  const retryCount = Number.isFinite(Number(options.retryCount))
+    ? Number(options.retryCount)
+    : REQUEST_RETRY_COUNT
+  const maxAttempts = Math.max(1, Math.min(4, retryCount + 1))
+  let lastError
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      return await requestOnce(options)
+    } catch (error) {
+      lastError = error
+      if (attempt >= maxAttempts || !shouldRetry(error)) break
+      console.warn('[request] retrying failed request', {
+        url: options.url,
+        attempt,
+        maxAttempts,
+        statusCode: error.statusCode || 0,
+        code: error.code || '',
+      })
+    }
+  }
+
+  throw lastError
 }
 
 module.exports = {

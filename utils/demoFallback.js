@@ -13,7 +13,7 @@ function getRuntimeEnvVersion() {
 function isDevelopmentRuntime() {
   const envVersion = getRuntimeEnvVersion()
   if (envVersion) return envVersion === 'develop'
-  return ENV === 'development'
+  return ENV === 'develop' || ENV === 'development'
 }
 
 function canUseDemoFallback() {
