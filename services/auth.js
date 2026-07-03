@@ -1,4 +1,5 @@
-const { ENABLE_DEMO_FALLBACK, WECHAT_LOGIN_ENDPOINT } = require('../config/api')
+const { WECHAT_LOGIN_ENDPOINT } = require('../config/api')
+const { handleDemoFallback } = require('../utils/demoFallback')
 const { request } = require('../utils/request')
 
 function createDemoLoginResult() {
@@ -42,12 +43,7 @@ async function loginWithWechat() {
       data: { code },
     })
   } catch (error) {
-    if (!ENABLE_DEMO_FALLBACK) {
-      throw new Error(error.message && error.message !== 'request:fail' ? error.message : '登录服务暂不可用')
-    }
-
-    console.warn('Wechat login API failed, using demo login.', error)
-    result = createDemoLoginResult()
+    result = handleDemoFallback('wechat-login', 'wechat login', error, createDemoLoginResult)
   }
 
   const accessToken = result.access || result.accessToken || result.token

@@ -9,6 +9,7 @@ Page({
     loading: true,
     adviceLoading: false,
     error: '',
+    emptyMessage: '',
     options: [],
     optionLabels: [],
     selectedIndex: 0,
@@ -32,14 +33,25 @@ Page({
   },
 
   async loadOptions() {
-    this.setData({ loading: true, error: '' })
+    this.setData({ loading: true, error: '', emptyMessage: '' })
 
     try {
       const dashboard = await getDashboardData()
       const options = flattenGreenhouses(dashboard)
 
       if (!options.length) {
-        throw new Error('暂无可用大棚')
+        this.setData({
+          options: [],
+          optionLabels: [],
+          selected: null,
+          result: null,
+          current: null,
+          forecast: [],
+          advice: null,
+          emptyMessage: '暂无可用大棚，暂不能生成天气建议。',
+          loading: false,
+        })
+        return
       }
 
       const selectedIndex = this.findInitialIndex(options)
@@ -49,6 +61,7 @@ Page({
         optionLabels: options.map((item) => item.label),
         selectedIndex,
         selected: options[selectedIndex],
+        emptyMessage: '',
         loading: false,
       })
       this.loadAdvice()
@@ -56,6 +69,7 @@ Page({
       this.setData({
         loading: false,
         error: error.message || '加载大棚失败',
+        emptyMessage: '',
       })
     }
   },
@@ -86,7 +100,7 @@ Page({
     const selected = this.data.selected
     if (!selected) return
 
-    this.setData({ adviceLoading: true, error: '' })
+    this.setData({ adviceLoading: true, error: '', emptyMessage: '' })
 
     try {
       const result = await getWeatherAdvice(selected.crop, selected.greenhouse)

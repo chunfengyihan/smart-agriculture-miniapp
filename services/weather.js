@@ -1,5 +1,6 @@
-const { ENABLE_DEMO_FALLBACK, WEATHER_ADVICE_ENDPOINT } = require('../config/api')
+const { WEATHER_ADVICE_ENDPOINT } = require('../config/api')
 const { findLocation } = require('../data/greenhouseLocations')
+const { handleDemoFallback } = require('../utils/demoFallback')
 const { request } = require('../utils/request')
 const { metricSnapshot } = require('../utils/greenhouse')
 
@@ -69,12 +70,7 @@ async function getWeatherAdvice(crop, greenhouse) {
       timeout: 18000,
     })
   } catch (error) {
-    if (ENABLE_DEMO_FALLBACK) {
-      console.warn('Weather advice failed, using demo data.', error)
-      return demoWeatherAdvice(crop, greenhouse)
-    }
-
-    throw error
+    return handleDemoFallback('weather-advice', 'weather advice', error, () => demoWeatherAdvice(crop, greenhouse))
   }
 }
 

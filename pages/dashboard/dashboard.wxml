@@ -28,7 +28,13 @@
       <text>来源 {{source}}</text>
     </view>
 
-    <scroll-view class="crop-tabs" scroll-x enhanced show-scrollbar="{{false}}">
+    <view wx:if="{{emptyMessage}}" class="state card">
+      <view class="state-title">暂无数据</view>
+      <view class="state-message">{{emptyMessage}}</view>
+      <button class="primary-button retry-button" bindtap="onRetryTap">重新加载</button>
+    </view>
+
+    <scroll-view wx:if="{{!emptyMessage}}" class="crop-tabs" scroll-x enhanced show-scrollbar="{{false}}">
       <button
         wx:for="{{crops}}"
         wx:key="id"
@@ -40,7 +46,7 @@
       </button>
     </scroll-view>
 
-    <view wx:if="{{activeCrop}}" class="crop-panel card">
+    <view wx:if="{{!emptyMessage && activeCrop}}" class="crop-panel card">
       <view class="crop-main">
         <image class="crop-image" src="{{activeCrop.heroImage}}" mode="aspectFill" />
         <view class="crop-copy">
@@ -64,11 +70,11 @@
       </view>
     </view>
 
-    <view class="section-title">大棚列表</view>
+    <view wx:if="{{!emptyMessage}}" class="section-title">大棚列表</view>
 
-    <view wx:if="{{greenhouses.length === 0}}" class="state card">暂无大棚数据</view>
+    <view wx:if="{{!emptyMessage && greenhouses.length === 0}}" class="state card">暂无大棚数据</view>
 
-    <view class="greenhouse-grid">
+    <view wx:if="{{!emptyMessage}}" class="greenhouse-grid">
       <button
         wx:for="{{greenhouses}}"
         wx:key="id"

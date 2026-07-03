@@ -1,4 +1,5 @@
-const { API_BASE_URL, CROP_DIAGNOSIS_ENDPOINT, ENABLE_DEMO_FALLBACK } = require('../config/api')
+const { API_BASE_URL, CROP_DIAGNOSIS_ENDPOINT } = require('../config/api')
+const { handleDemoFallback } = require('../utils/demoFallback')
 const { metricSnapshot } = require('../utils/greenhouse')
 
 function getToken() {
@@ -32,6 +33,22 @@ function demoDiagnosis(crop, greenhouse) {
   }
 }
 
+function createUploadError(message, options = {}) {
+  const error = new Error(message)
+  error.statusCode = options.statusCode || 0
+  error.code = String(options.code || options.statusCode || 'UPLOAD_FAILED')
+  error.details = options.details || {}
+  return error
+}
+
+function resolveOrRejectFallback(resolve, reject, crop, greenhouse, error) {
+  try {
+    resolve(handleDemoFallback('crop-diagnosis', 'crop diagnosis', error, () => demoDiagnosis(crop, greenhouse)))
+  } catch (nextError) {
+    reject(nextError)
+  }
+}
+
 function diagnoseCrop(crop, greenhouse, imagePath, useEnvironmentContext) {
   const token = getToken()
 
@@ -60,20 +77,25 @@ function diagnoseCrop(crop, greenhouse, imagePath, useEnvironmentContext) {
           return
         }
 
-        if (ENABLE_DEMO_FALLBACK) {
-          resolve(demoDiagnosis(crop, greenhouse))
-          return
-        }
-
-        reject(new Error(`图片诊断失败 ${response.statusCode}`))
+        resolveOrRejectFallback(
+          resolve,
+          reject,
+          crop,
+          greenhouse,
+          createUploadError(`Image diagnosis failed ${response.statusCode}`, {
+            statusCode: response.statusCode,
+            details: response.data || {},
+          }),
+        )
       },
       fail(error) {
-        if (ENABLE_DEMO_FALLBACK) {
-          resolve(demoDiagnosis(crop, greenhouse))
-          return
-        }
-
-        reject(new Error(error.errMsg || '图片上传失败'))
+        resolveOrRejectFallback(
+          resolve,
+          reject,
+          crop,
+          greenhouse,
+          createUploadError(error.errMsg || 'Image upload failed', { details: error }),
+        )
       },
     })
   })

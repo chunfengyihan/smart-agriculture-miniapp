@@ -1,5 +1,6 @@
-const { DASHBOARD_ENDPOINT, ENABLE_DEMO_FALLBACK } = require('../config/api')
+const { DASHBOARD_ENDPOINT } = require('../config/api')
 const { createDemoDashboard } = require('../data/demoDashboard')
+const { handleDemoFallback } = require('../utils/demoFallback')
 const { request } = require('../utils/request')
 
 async function getDashboardData() {
@@ -9,12 +10,7 @@ async function getDashboardData() {
       method: 'GET',
     })
   } catch (error) {
-    if (ENABLE_DEMO_FALLBACK) {
-      console.warn('Dashboard API failed, using demo data.', error)
-      return createDemoDashboard()
-    }
-
-    throw error
+    return handleDemoFallback('dashboard', 'dashboard data', error, createDemoDashboard)
   }
 }
 

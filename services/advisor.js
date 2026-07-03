@@ -1,4 +1,5 @@
-const { AGRI_CHAT_ENDPOINT, ENABLE_DEMO_FALLBACK } = require('../config/api')
+const { AGRI_CHAT_ENDPOINT } = require('../config/api')
+const { handleDemoFallback } = require('../utils/demoFallback')
 const { request } = require('../utils/request')
 const { metricSnapshot } = require('../utils/greenhouse')
 
@@ -34,12 +35,7 @@ async function askAdvisor(crop, greenhouse, question) {
       timeout: 25000,
     })
   } catch (error) {
-    if (ENABLE_DEMO_FALLBACK) {
-      console.warn('Agri advisor failed, using demo data.', error)
-      return demoAdvisor(crop, greenhouse, question)
-    }
-
-    throw error
+    return handleDemoFallback('agri-advisor', 'agri advisor', error, () => demoAdvisor(crop, greenhouse, question))
   }
 }
 

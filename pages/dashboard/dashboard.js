@@ -6,6 +6,7 @@ Page({
     loading: true,
     refreshing: false,
     error: '',
+    emptyMessage: '',
     generatedAt: '',
     source: '',
     crops: [],
@@ -30,6 +31,7 @@ Page({
       loading: !options.refreshing,
       refreshing: !!options.refreshing,
       error: '',
+      emptyMessage: '',
     })
 
     try {
@@ -42,6 +44,7 @@ Page({
         activeCropIndex: nextIndex,
         generatedAt: formatTime(dashboard.generatedAt),
         source: dashboard.source || '-',
+        emptyMessage: crops.length ? '' : '暂无作物和大棚数据，请稍后重试或联系管理员。',
         loading: false,
         refreshing: false,
       })
@@ -49,6 +52,7 @@ Page({
     } catch (error) {
       this.setData({
         error: error.message || '看板数据加载失败',
+        emptyMessage: '',
         loading: false,
         refreshing: false,
       })

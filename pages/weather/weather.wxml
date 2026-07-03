@@ -7,7 +7,13 @@
   <view wx:if="{{loading}}" class="state card">正在加载大棚...</view>
 
   <block wx:else>
-    <picker mode="selector" range="{{optionLabels}}" value="{{selectedIndex}}" bindchange="onPickerChange">
+    <view wx:if="{{emptyMessage}}" class="state card">
+      <view class="state-title">暂无数据</view>
+      <view class="state-message">{{emptyMessage}}</view>
+      <button class="primary-button retry-button" bindtap="onRetryTap">重新加载</button>
+    </view>
+
+    <picker wx:if="{{!emptyMessage}}" mode="selector" range="{{optionLabels}}" value="{{selectedIndex}}" bindchange="onPickerChange">
       <view class="picker-card card">
         <text>当前大棚</text>
         <text>{{optionLabels[selectedIndex]}}</text>
