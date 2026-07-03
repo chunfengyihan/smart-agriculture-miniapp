@@ -4,12 +4,58 @@ function getToken() {
   return wx.getStorageSync('token') || ''
 }
 
+function isObject(value) {
+  return value && typeof value === 'object'
+}
+
+function createRequestError(message, options = {}) {
+  const error = new Error(message)
+  error.statusCode = options.statusCode || 0
+  error.code = String(options.code || options.statusCode || 'REQUEST_FAILED')
+  error.details = options.details || {}
+  error.requestId = options.requestId || ''
+  return error
+}
+
 function unwrapResponse(body) {
-  if (body && typeof body === 'object' && Object.prototype.hasOwnProperty.call(body, 'data') && body.code === 0) {
-    return body.data
+  if (isObject(body) && Object.prototype.hasOwnProperty.call(body, 'code')) {
+    if (body.code === 0 && Object.prototype.hasOwnProperty.call(body, 'data')) {
+      return body.data
+    }
+
+    throw createRequestError(body.message || 'Request failed', {
+      code: body.code,
+      details: body.details || body.data || {},
+      requestId: body.request_id || '',
+    })
   }
 
   return body
+}
+
+function errorFromResponse(response) {
+  const body = response.data
+
+  if (isObject(body) && Object.prototype.hasOwnProperty.call(body, 'code')) {
+    return createRequestError(body.message || `Request failed ${response.statusCode}`, {
+      statusCode: response.statusCode,
+      code: body.code,
+      details: body.details || body.data || {},
+      requestId: body.request_id || '',
+    })
+  }
+
+  if (isObject(body) && body.message) {
+    return createRequestError(body.message, {
+      statusCode: response.statusCode,
+      details: body,
+    })
+  }
+
+  return createRequestError(`Request failed ${response.statusCode}`, {
+    statusCode: response.statusCode,
+    details: body || {},
+  })
 }
 
 function request(options) {
@@ -21,7 +67,7 @@ function request(options) {
     options.header || {},
   )
 
-  if (token) {
+  if (token && !header.Authorization) {
     header.Authorization = `Bearer ${token}`
   }
 
@@ -34,19 +80,26 @@ function request(options) {
       header,
       success(response) {
         if (response.statusCode >= 200 && response.statusCode < 300) {
-          resolve(unwrapResponse(response.data))
+          try {
+            resolve(unwrapResponse(response.data))
+          } catch (error) {
+            error.statusCode = error.statusCode || response.statusCode
+            reject(error)
+          }
           return
         }
 
-        reject(new Error(response.data && response.data.message ? response.data.message : `请求失败 ${response.statusCode}`))
+        reject(errorFromResponse(response))
       },
       fail(error) {
-        reject(new Error(error.errMsg || '网络请求失败'))
+        reject(createRequestError(error.errMsg || 'Network request failed', { details: error }))
       },
     })
   })
 }
 
 module.exports = {
+  createRequestError,
   request,
+  unwrapResponse,
 }
