@@ -1,0 +1,73 @@
+<view class="map-page">
+  <view wx:if="{{loading}}" class="page">
+    <view class="state card">正在加载地图...</view>
+  </view>
+
+  <view wx:elif="{{error}}" class="page">
+    <view class="state card">{{error}}</view>
+  </view>
+
+  <block wx:else>
+    <map
+      class="greenhouse-map"
+      latitude="{{latitude}}"
+      longitude="{{longitude}}"
+      markers="{{markers}}"
+      scale="{{scale}}"
+      show-location
+      bindmarkertap="onMarkerTap"
+    />
+
+    <view
+      class="map-list card {{sheetExpanded ? 'expanded' : 'collapsed'}} {{sheetDragging ? 'dragging' : ''}}"
+      style="transform: translateY({{sheetDragY}}px);"
+    >
+      <view
+        class="sheet-handle-wrap"
+        bindtap="onSheetHandleTap"
+        bindtouchstart="onSheetTouchStart"
+        bindtouchmove="onSheetTouchMove"
+        bindtouchend="onSheetTouchEnd"
+      >
+        <view class="sheet-handle"></view>
+      </view>
+
+      <view wx:if="{{sheetExpanded}}" class="map-list-head">
+        <view>
+          <view class="map-list-title">大棚点位</view>
+        </view>
+      </view>
+
+      <scroll-view wx:if="{{sheetExpanded}}" class="map-scroll" scroll-y>
+        <view
+          wx:for="{{greenhouses}}"
+          wx:key="markerId"
+          class="map-item {{item.markerId === selectedMarkerId ? 'active' : ''}}"
+          data-marker-id="{{item.markerId}}"
+          bindtap="onGreenhouseTap"
+        >
+          <view>
+            <view class="item-name">{{item.name}}</view>
+            <view class="item-meta">{{item.cropName}} · {{item.area}}</view>
+            <view class="item-address">{{item.address}}</view>
+          </view>
+          <text class="status-pill {{item.status}}">{{item.statusLabel}}</text>
+        </view>
+      </scroll-view>
+
+      <view
+        wx:else
+        class="map-item compact active"
+        data-marker-id="{{selectedGreenhouse.markerId}}"
+        bindtap="onSheetHandleTap"
+      >
+        <view>
+          <view class="item-name">{{selectedGreenhouse.name}}</view>
+          <view class="item-meta">{{selectedGreenhouse.cropName}} · {{selectedGreenhouse.area}}</view>
+          <view class="item-address">{{selectedGreenhouse.address}}</view>
+        </view>
+        <text class="status-pill {{selectedGreenhouse.status}}">{{selectedGreenhouse.statusLabel}}</text>
+      </view>
+    </view>
+  </block>
+</view>

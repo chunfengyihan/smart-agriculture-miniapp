@@ -1,0 +1,58 @@
+<view class="page feature-page">
+  <view class="feature-header card">
+    <view class="feature-title">天气与棚内建议</view>
+    <view class="feature-desc">结合大棚位置、作物和当前环境指标生成操作参考</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state card">正在加载大棚...</view>
+
+  <block wx:else>
+    <picker mode="selector" range="{{optionLabels}}" value="{{selectedIndex}}" bindchange="onPickerChange">
+      <view class="picker-card card">
+        <text>当前大棚</text>
+        <text>{{optionLabels[selectedIndex]}}</text>
+      </view>
+    </picker>
+
+    <view wx:if="{{error}}" class="state card">
+      <view class="state-title">加载失败</view>
+      <view class="state-message">{{error}}</view>
+      <button class="primary-button retry-button" bindtap="onRetryTap">重试</button>
+    </view>
+
+    <view wx:elif="{{adviceLoading}}" class="state card">正在生成建议...</view>
+
+    <block wx:elif="{{current}}">
+      <view class="weather-card card">
+        <view>
+          <view class="weather-label">{{current.description}}</view>
+          <view class="weather-temp">{{current.temperature}}°C</view>
+        </view>
+        <view class="weather-meta">
+          <text>湿度 {{current.humidity}}%</text>
+          <text>风速 {{current.windSpeed}} km/h</text>
+          <text>{{current.timeText}}</text>
+        </view>
+      </view>
+
+      <view class="section-title">未来预报</view>
+      <view class="forecast-list card">
+        <view wx:for="{{forecast}}" wx:key="date" class="forecast-row">
+          <text>{{item.date}}</text>
+          <text>{{item.description}}</text>
+          <text>{{item.tempText}}</text>
+          <text>降水 {{item.rainText}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{advice}}" class="advice-card card">
+        <view class="advice-title">{{advice.summary}}</view>
+        <view class="list-title">建议动作</view>
+        <view wx:for="{{advice.actions}}" wx:key="*this" class="list-line">{{item}}</view>
+        <view class="list-title">关注项</view>
+        <view wx:for="{{advice.watchItems}}" wx:key="*this" class="list-line">{{item}}</view>
+        <view class="disclaimer">{{advice.disclaimer}}</view>
+      </view>
+    </block>
+  </block>
+</view>

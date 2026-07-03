@@ -1,0 +1,45 @@
+<view class="page profile-page">
+  <view class="profile-card card">
+    <image class="brand-logo mark" src="/assets/images/logo-mark.png" mode="aspectFit" />
+    <view class="profile-title">智慧农业小程序</view>
+    <view class="profile-subtitle">移动端大棚监控与数据查看</view>
+  </view>
+
+  <view class="info-card card">
+    <view class="info-row">
+      <text>接口环境</text>
+      <text>{{apiBaseUrl}}</text>
+    </view>
+    <view class="info-row">
+      <text>登录状态</text>
+      <text>{{token ? '已登录' : '未登录'}}</text>
+    </view>
+  </view>
+
+  <view class="action-card card">
+    <button wx:if="{{!token}}" class="primary-button" loading="{{loggingIn}}" bindtap="onLoginTap">
+      微信登录
+    </button>
+    <button wx:else class="secondary-button" bindtap="onLogoutTap">
+      退出登录
+    </button>
+    <view wx:if="{{message}}" class="message">{{message}}</view>
+  </view>
+
+  <view class="note-card card">
+    <view class="note-title">上线前配置</view>
+    <view>替换真实 AppID、HTTPS API 域名，并在微信公众平台配置 request 合法域名。</view>
+  </view>
+
+  <view wx:if="{{showLoginPrompt}}" class="login-mask">
+    <view class="login-dialog">
+      <image class="login-dialog-logo" src="/assets/images/logo-mark.png" mode="aspectFit" />
+      <view class="login-dialog-title">需要微信登录</view>
+      <view class="login-dialog-text">智能工具需要登录后使用，登录后会自动返回刚才选择的功能。</view>
+      <button class="primary-button login-dialog-button" loading="{{loggingIn}}" bindtap="onLoginTap">
+        微信登录
+      </button>
+      <button class="dialog-cancel" bindtap="onDismissLoginPrompt">暂不登录</button>
+    </view>
+  </view>
+</view>

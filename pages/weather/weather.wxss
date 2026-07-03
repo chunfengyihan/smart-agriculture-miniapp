@@ -1,0 +1,118 @@
+.feature-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22rpx;
+}
+
+.feature-header,
+.picker-card,
+.weather-card,
+.forecast-list,
+.advice-card,
+.state {
+  padding: 26rpx;
+}
+
+.feature-title {
+  color: #16231c;
+  font-size: 38rpx;
+  font-weight: 800;
+}
+
+.feature-desc,
+.state-message,
+.disclaimer {
+  margin-top: 10rpx;
+  color: #6b7d70;
+  line-height: 1.55;
+}
+
+.picker-card,
+.weather-card,
+.forecast-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.picker-card text:first-child,
+.weather-label,
+.section-title,
+.list-title {
+  color: #6b7d70;
+}
+
+.picker-card text:last-child {
+  color: #16231c;
+  font-weight: 800;
+  text-align: right;
+}
+
+.state {
+  text-align: center;
+}
+
+.state-title,
+.section-title {
+  color: #16231c;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.retry-button {
+  width: 220rpx;
+  margin: 24rpx auto 0;
+}
+
+.weather-temp {
+  margin-top: 6rpx;
+  color: #0f7a4c;
+  font-size: 56rpx;
+  font-weight: 800;
+}
+
+.weather-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8rpx;
+  color: #6b7d70;
+  font-size: 23rpx;
+}
+
+.forecast-list {
+  padding-top: 6rpx;
+  padding-bottom: 6rpx;
+}
+
+.forecast-row {
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #edf2ee;
+  color: #486154;
+  font-size: 23rpx;
+}
+
+.forecast-row:last-child {
+  border-bottom: 0;
+}
+
+.advice-title {
+  color: #16231c;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.list-title {
+  margin-top: 22rpx;
+  font-weight: 800;
+}
+
+.list-line {
+  margin-top: 10rpx;
+  padding: 14rpx 18rpx;
+  border-radius: 12rpx;
+  background: #f3f7f2;
+  color: #486154;
+  line-height: 1.45;
+}

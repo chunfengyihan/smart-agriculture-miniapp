@@ -1,0 +1,61 @@
+<view class="page feature-page">
+  <view class="feature-header card">
+    <view class="feature-title">作物图片诊断</view>
+    <view class="feature-desc">上传叶片、果实或病斑照片，并可结合当前大棚环境指标辅助判断</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state card">正在加载大棚...</view>
+
+  <block wx:else>
+    <picker mode="selector" range="{{optionLabels}}" value="{{selectedIndex}}" bindchange="onPickerChange">
+      <view class="picker-card card">
+        <text>当前大棚</text>
+        <text>{{optionLabels[selectedIndex]}}</text>
+      </view>
+    </picker>
+
+    <view class="upload-card card">
+      <button class="image-picker" bindtap="onChooseImageTap">
+        <image wx:if="{{imagePath}}" class="preview-image" src="{{imagePath}}" mode="aspectFill" />
+        <view wx:else class="upload-placeholder">选择或拍摄作物图片</view>
+      </button>
+
+      <view class="switch-row">
+        <text>结合环境指标</text>
+        <switch checked="{{useEnvironmentContext}}" color="#0f7a4c" bindchange="onContextChange" />
+      </view>
+
+      <button class="primary-button diagnose-button" loading="{{diagnosing}}" bindtap="onDiagnoseTap">
+        开始诊断
+      </button>
+    </view>
+
+    <view wx:if="{{error}}" class="state card">{{error}}</view>
+
+    <view wx:if="{{result}}" class="result-card card">
+      <view class="result-head">
+        <view>
+          <view class="result-title">诊断结果</view>
+          <view class="result-risk">风险等级：{{result.riskLevel}}</view>
+        </view>
+        <view class="result-pill">{{result.hasPestOrDisease ? '疑似病虫害' : '未见明确病虫害'}}</view>
+      </view>
+
+      <view class="section-label">环境评估</view>
+      <view class="paragraph">{{result.environmentAssessment}}</view>
+
+      <view wx:if="{{result.suspectedIssues.length}}" class="section-label">疑似问题</view>
+      <view wx:for="{{result.suspectedIssues}}" wx:key="name" class="list-line">
+        {{item.name}} · 置信度 {{item.confidence}}
+      </view>
+
+      <view class="section-label">建议</view>
+      <view wx:for="{{result.recommendations}}" wx:key="*this" class="list-line">{{item}}</view>
+
+      <view wx:if="{{result.followUpQuestions && result.followUpQuestions.length}}" class="section-label">追问</view>
+      <view wx:for="{{result.followUpQuestions}}" wx:key="*this" class="list-line">{{item}}</view>
+
+      <view class="disclaimer">{{result.disclaimer}}</view>
+    </view>
+  </block>
+</view>

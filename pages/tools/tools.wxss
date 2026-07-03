@@ -1,0 +1,95 @@
+.tools-page {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 22rpx;
+  width: 100%;
+}
+
+.tools-header {
+  width: 100%;
+  padding: 30rpx;
+  background: #ffffff;
+}
+
+.tool-list {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 22rpx;
+}
+
+.eyebrow {
+  color: #0f7a4c;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.title {
+  margin-top: 10rpx;
+  color: #16231c;
+  font-size: 40rpx;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin-top: 10rpx;
+  color: #6b7d70;
+  line-height: 1.55;
+}
+
+.tool-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  width: 100%;
+  max-width: none;
+  min-height: 154rpx;
+  flex: none;
+  padding: 26rpx;
+  text-align: left;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+
+.tool-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 16rpx;
+  background: #e6f3eb;
+  color: #0f7a4c;
+  font-weight: 800;
+  flex: 0 0 auto;
+}
+
+.tool-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.tool-title {
+  color: #16231c;
+  font-size: 31rpx;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.tool-desc {
+  margin-top: 8rpx;
+  color: #6b7d70;
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.tool-arrow {
+  width: 18rpx;
+  height: 18rpx;
+  border-top: 4rpx solid #91a194;
+  border-right: 4rpx solid #91a194;
+  transform: rotate(45deg);
+  flex: 0 0 auto;
+}

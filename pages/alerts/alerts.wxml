@@ -1,0 +1,56 @@
+<view class="page alerts-page">
+  <view class="summary-card card">
+    <view>
+      <view class="summary-title">预警中心</view>
+      <view class="summary-desc">汇总所有大棚的最新预警和严重告警</view>
+    </view>
+    <view class="summary-count">{{summary.total}}</view>
+  </view>
+
+  <view class="summary-grid">
+    <view class="summary-item card">
+      <text>{{summary.warning}}</text>
+      <text>预警</text>
+    </view>
+    <view class="summary-item card">
+      <text>{{summary.critical}}</text>
+      <text>严重</text>
+    </view>
+  </view>
+
+  <view class="filter-row">
+    <button
+      wx:for="{{filters}}"
+      wx:key="key"
+      class="filter-chip {{item.key === activeFilter ? 'active' : ''}}"
+      data-filter="{{item.key}}"
+      bindtap="onFilterTap"
+    >
+      {{item.label}}
+    </button>
+  </view>
+
+  <view wx:if="{{loading}}" class="state card">正在加载预警...</view>
+  <view wx:elif="{{error}}" class="state card">{{error}}</view>
+  <view wx:elif="{{visibleAlerts.length === 0}}" class="state card">暂无预警</view>
+
+  <view wx:else class="alert-list">
+    <view
+      wx:for="{{visibleAlerts}}"
+      wx:key="id"
+      class="alert-card card {{item.level}}"
+      data-index="{{index}}"
+      bindtap="onAlertTap"
+    >
+      <view class="alert-head">
+        <view>
+          <view class="alert-title">{{item.greenhouseName}}</view>
+          <view class="alert-meta">{{item.cropName}} · {{item.area}}</view>
+        </view>
+        <text class="level-pill {{item.level}}">{{item.levelLabel}}</text>
+      </view>
+      <view class="alert-message">{{item.message}}</view>
+      <view class="alert-time">{{item.timeText}}</view>
+    </view>
+  </view>
+</view>

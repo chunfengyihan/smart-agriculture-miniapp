@@ -1,0 +1,132 @@
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.profile-card {
+  padding: 34rpx 28rpx;
+  text-align: center;
+}
+
+.brand-logo {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+}
+
+.profile-title {
+  margin-top: 18rpx;
+  color: #16231c;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.profile-subtitle {
+  margin-top: 8rpx;
+  color: #6b7d70;
+}
+
+.info-card,
+.action-card,
+.note-card {
+  padding: 24rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #edf2ee;
+}
+
+.info-row:last-child {
+  border-bottom: 0;
+}
+
+.info-row text:first-child {
+  color: #6b7d70;
+  flex: 0 0 auto;
+}
+
+.info-row text:last-child {
+  color: #16231c;
+  min-width: 0;
+  text-align: right;
+  word-break: break-all;
+}
+
+.message {
+  margin-top: 18rpx;
+  color: #6b7d70;
+  text-align: center;
+}
+
+.note-title {
+  margin-bottom: 12rpx;
+  color: #16231c;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.note-card {
+  color: #6b7d70;
+  line-height: 1.6;
+}
+
+.login-mask {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx;
+  background: rgba(18, 31, 24, 0.42);
+}
+
+.login-dialog {
+  width: 100%;
+  max-width: 620rpx;
+  padding: 42rpx 34rpx 30rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+  box-shadow: 0 24rpx 70rpx rgba(22, 35, 28, 0.18);
+  text-align: center;
+}
+
+.login-dialog-logo {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 24rpx;
+  background: #f3f7f2;
+}
+
+.login-dialog-title {
+  margin-top: 22rpx;
+  color: #16231c;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.login-dialog-text {
+  margin-top: 12rpx;
+  color: #6b7d70;
+  font-size: 25rpx;
+  line-height: 1.55;
+}
+
+.login-dialog-button {
+  margin-top: 30rpx;
+}
+
+.dialog-cancel {
+  margin-top: 18rpx;
+  color: #6b7d70;
+  font-size: 25rpx;
+}

@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/dashboard/dashboard",
+    "pages/map/map",
+    "pages/alerts/alerts",
+    "pages/greenhouse/greenhouse",
+    "pages/tools/tools",
+    "pages/weather/weather",
+    "pages/diagnosis/diagnosis",
+    "pages/advisor/advisor",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "navigationBarTitleText": "智慧农业",
+    "navigationBarBackgroundColor": "#0f7a4c",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f7f4"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于在地图中显示您与大棚点位的相对位置"
+    }
+  },
+  "tabBar": {
+    "color": "#6b7d70",
+    "selectedColor": "#0f7a4c",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/dashboard/dashboard",
+        "text": "看板"
+      },
+      {
+        "pagePath": "pages/map/map",
+        "text": "地图"
+      },
+      {
+        "pagePath": "pages/alerts/alerts",
+        "text": "预警"
+      },
+      {
+        "pagePath": "pages/tools/tools",
+        "text": "工具"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

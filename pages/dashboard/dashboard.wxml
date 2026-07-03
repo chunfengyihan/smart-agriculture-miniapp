@@ -1,0 +1,104 @@
+<view class="page dashboard-page">
+  <view class="hero card">
+    <view>
+      <view class="brand-row">
+        <image class="hero-logo" src="/assets/images/logo-mark.png" mode="aspectFit" />
+        <text class="eyebrow">SMART AGRICULTURE</text>
+      </view>
+      <view class="hero-title">智慧农业移动看板</view>
+      <view class="hero-subtitle">作物、大棚、设备与环境指标实时概览</view>
+    </view>
+    <view class="hero-meta">
+      <text>移动监测</text>
+      <text>实时概览</text>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state card">正在加载看板数据...</view>
+
+  <view wx:elif="{{error}}" class="state card">
+    <view class="state-title">数据加载失败</view>
+    <view class="state-message">{{error}}</view>
+    <button class="primary-button retry-button" bindtap="onRetryTap">重新加载</button>
+  </view>
+
+  <block wx:else>
+    <view class="meta-row">
+      <text>更新 {{generatedAt}}</text>
+      <text>来源 {{source}}</text>
+    </view>
+
+    <scroll-view class="crop-tabs" scroll-x enhanced show-scrollbar="{{false}}">
+      <button
+        wx:for="{{crops}}"
+        wx:key="id"
+        class="crop-tab {{index === activeCropIndex ? 'active' : ''}}"
+        data-index="{{index}}"
+        bindtap="onCropTap"
+      >
+        {{item.name}}
+      </button>
+    </scroll-view>
+
+    <view wx:if="{{activeCrop}}" class="crop-panel card">
+      <view class="crop-main">
+        <image class="crop-image" src="{{activeCrop.heroImage}}" mode="aspectFill" />
+        <view class="crop-copy">
+          <view class="crop-name">{{activeCrop.name}}</view>
+          <view class="crop-desc">{{activeCrop.description}}</view>
+        </view>
+      </view>
+      <view class="summary-grid">
+        <view>
+          <text>{{cropSummary.greenhouseCount}}</text>
+          <text>大棚</text>
+        </view>
+        <view>
+          <text>{{cropSummary.onlineDevices}}/{{cropSummary.totalDevices}}</text>
+          <text>设备在线</text>
+        </view>
+        <view>
+          <text>{{cropSummary.warningCount}}</text>
+          <text>预警大棚</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title">大棚列表</view>
+
+    <view wx:if="{{greenhouses.length === 0}}" class="state card">暂无大棚数据</view>
+
+    <view class="greenhouse-grid">
+      <button
+        wx:for="{{greenhouses}}"
+        wx:key="id"
+        class="greenhouse-card card {{item.status}}"
+        data-id="{{item.id}}"
+        bindtap="onGreenhouseTap"
+      >
+        <view class="greenhouse-head">
+          <view>
+            <view class="greenhouse-area">{{item.area}}</view>
+            <view class="greenhouse-name">{{item.name}}</view>
+          </view>
+          <text class="status-pill {{item.status}}">{{item.statusLabel}}</text>
+        </view>
+        <view class="device-line">{{item.onlineDevices}}/{{item.totalDevices}} 台设备在线</view>
+        <view class="metric-row">
+          <view>
+            <text>温度</text>
+            <text>{{item.airTempText}}</text>
+          </view>
+          <view>
+            <text>湿度</text>
+            <text>{{item.airHumidityText}}</text>
+          </view>
+          <view>
+            <text>土壤</text>
+            <text>{{item.soilHumidityText}}</text>
+          </view>
+        </view>
+      </button>
+    </view>
+  </block>
+</view>

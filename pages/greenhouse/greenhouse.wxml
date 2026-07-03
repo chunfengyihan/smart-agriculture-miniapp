@@ -1,0 +1,77 @@
+<view class="page detail-page">
+  <view wx:if="{{loading}}" class="state card">正在加载大棚详情...</view>
+
+  <view wx:elif="{{error}}" class="state card">
+    <view class="state-title">详情加载失败</view>
+    <view class="state-message">{{error}}</view>
+    <button class="primary-button retry-button" bindtap="onRetryTap">重新加载</button>
+  </view>
+
+  <block wx:else>
+    <view class="detail-header card {{greenhouse.status}}">
+      <view>
+        <view class="crop-label">{{crop.name}} / {{greenhouse.area}}</view>
+        <view class="detail-title">{{greenhouse.name}}</view>
+        <view class="detail-meta">{{greenhouse.onlineDevices}}/{{greenhouse.totalDevices}} 台设备在线 · 更新 {{generatedAt}}</view>
+      </view>
+      <text class="status-pill {{greenhouse.status}}">{{greenhouse.statusLabel}}</text>
+    </view>
+
+    <view class="section-title">核心指标</view>
+    <view class="metric-grid">
+      <view wx:for="{{metrics}}" wx:key="key" class="metric-card card {{item.status}}">
+        <view class="metric-label">{{item.label}}</view>
+        <view class="metric-value">{{item.displayValue}}</view>
+        <view class="metric-target">目标 {{item.target}}</view>
+        <view class="metric-status">{{item.statusLabel}}</view>
+      </view>
+    </view>
+
+    <view class="section-title">智能工具</view>
+    <view class="tool-grid">
+      <button class="tool-button card" data-type="weather" bindtap="onToolTap">
+        <text>天气建议</text>
+        <text>结合棚内指标</text>
+      </button>
+      <button class="tool-button card" data-type="diagnosis" bindtap="onToolTap">
+        <text>图片诊断</text>
+        <text>上传作物照片</text>
+      </button>
+      <button class="tool-button card" data-type="advisor" bindtap="onToolTap">
+        <text>农业问答</text>
+        <text>获取处理建议</text>
+      </button>
+    </view>
+
+    <view class="section-title">最近趋势</view>
+    <view class="trend-card card">
+      <view wx:if="{{trend.length === 0}}" class="empty-line">暂无趋势数据</view>
+      <block wx:else>
+        <view class="chart-legend">
+          <view><text class="dot temp"></text>气温</view>
+          <view><text class="dot humidity"></text>湿度</view>
+          <view><text class="dot soil"></text>土壤</view>
+        </view>
+        <canvas type="2d" id="trendCanvas" class="trend-canvas"></canvas>
+      </block>
+      <view wx:for="{{trend}}" wx:key="time" class="trend-row">
+        <text>{{item.timeText}}</text>
+        <text>气温 {{item.airTempText}}</text>
+        <text>湿度 {{item.airHumidityText}}</text>
+        <text>土壤 {{item.soilHumidityText}}</text>
+      </view>
+    </view>
+
+    <view class="section-title">预警中心</view>
+    <view class="alert-list">
+      <view wx:if="{{alerts.length === 0}}" class="state card">暂无预警</view>
+      <view wx:for="{{alerts}}" wx:key="id" class="alert-card card {{item.level}}">
+        <view class="alert-head">
+          <text>{{item.levelLabel}}</text>
+          <text>{{item.timeText}}</text>
+        </view>
+        <view class="alert-message">{{item.message}}</view>
+      </view>
+    </view>
+  </block>
+</view>

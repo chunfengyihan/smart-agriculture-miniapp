@@ -1,0 +1,57 @@
+<view class="page feature-page">
+  <view class="feature-header card">
+    <view class="feature-title">农业问答</view>
+    <view class="feature-desc">选择大棚后提问，回答会参考当前作物和环境指标</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state card">正在加载大棚...</view>
+
+  <block wx:else>
+    <picker mode="selector" range="{{optionLabels}}" value="{{selectedIndex}}" bindchange="onPickerChange">
+      <view class="picker-card card">
+        <text>当前大棚</text>
+        <text>{{optionLabels[selectedIndex]}}</text>
+      </view>
+    </picker>
+
+    <view class="question-card card">
+      <textarea
+        class="question-input"
+        value="{{question}}"
+        maxlength="160"
+        placeholder="例如：今天这个棚需要通风吗？"
+        bindinput="onQuestionInput"
+      />
+      <view class="quick-row">
+        <button
+          wx:for="{{quickQuestions}}"
+          wx:key="*this"
+          class="quick-chip"
+          data-question="{{item}}"
+          bindtap="onQuickTap"
+        >
+          {{item}}
+        </button>
+      </view>
+      <button class="primary-button ask-button" loading="{{asking}}" bindtap="onAskTap">获取建议</button>
+    </view>
+
+    <view wx:if="{{error}}" class="state card">{{error}}</view>
+
+    <view wx:if="{{result}}" class="result-card card">
+      <view class="result-title">回答</view>
+      <view class="summary">{{result.summary}}</view>
+
+      <view class="section-label">可能原因</view>
+      <view wx:for="{{result.likelyCauses}}" wx:key="*this" class="list-line">{{item}}</view>
+
+      <view class="section-label">建议动作</view>
+      <view wx:for="{{result.actions}}" wx:key="*this" class="list-line">{{item}}</view>
+
+      <view class="section-label">关注项</view>
+      <view wx:for="{{result.watchItems}}" wx:key="*this" class="list-line">{{item}}</view>
+
+      <view class="disclaimer">{{result.disclaimer}}</view>
+    </view>
+  </block>
+</view>

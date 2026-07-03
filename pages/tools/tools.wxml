@@ -1,0 +1,24 @@
+<view class="page tools-page">
+  <view class="tools-header card">
+    <view class="eyebrow">AGRI TOOLS</view>
+    <view class="title">智能农业工具</view>
+    <view class="subtitle">天气、诊断和问答集中管理，适合巡棚时快速使用</view>
+  </view>
+
+  <view class="tool-list">
+    <view
+      wx:for="{{tools}}"
+      wx:key="url"
+      class="tool-card card"
+      data-url="{{item.url}}"
+      bindtap="onToolTap"
+    >
+      <view class="tool-tag">{{item.tag}}</view>
+      <view class="tool-content">
+        <view class="tool-title">{{item.title}}</view>
+        <view class="tool-desc">{{item.desc}}</view>
+      </view>
+      <view class="tool-arrow"></view>
+    </view>
+  </view>
+</view>
